@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Award, GraduationCap, Calendar, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Award, GraduationCap, Clock } from 'lucide-react';
 
 interface Doctor {
   name: string;
@@ -9,7 +8,6 @@ interface Doctor {
   experience: string;
   education: string;
   image: string;
-  quote: string;
 }
 
 const doctors: Doctor[] = [
@@ -20,7 +18,6 @@ const doctors: Doctor[] = [
     experience: '18 ans',
     education: 'Université Paris Descartes',
     image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop',
-    quote: 'Chaque sourire est unique, chaque patient mérite une attention personnalisée.',
   },
   {
     name: 'Dr. Thomas Bernard',
@@ -29,7 +26,6 @@ const doctors: Doctor[] = [
     experience: '15 ans',
     education: 'Université de Strasbourg',
     image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2070&auto=format&fit=crop',
-    quote: 'L\'implantologie moderne offre des solutions durables et naturelles.',
   },
   {
     name: 'Dr. Camille Lefebvre',
@@ -38,22 +34,11 @@ const doctors: Doctor[] = [
     experience: '12 ans',
     education: 'Université de Lyon',
     image: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?q=80&w=2070&auto=format&fit=crop',
-    quote: 'Un alignement parfait pour un sourire en toute confiance.',
-  },
-  {
-    name: 'Dr. Marc Dupont',
-    title: 'Pédodontiste',
-    specialty: 'Dentisterie Pédiatrique',
-    experience: '10 ans',
-    education: 'Université de Bordeaux',
-    image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=2070&auto=format&fit=crop',
-    quote: 'Créer une expérience positive dès le plus jeune âge.',
   },
 ];
 
 const Doctors = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -77,23 +62,15 @@ const Doctors = () => {
     <section
       id="equipe"
       ref={sectionRef}
-      className="section-padding relative overflow-hidden bg-muted/30"
+      className="py-20 lg:py-28 relative overflow-hidden bg-muted/20"
     >
-      {/* Decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/[0.02] rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/[0.02] rounded-full blur-[100px]" />
-
-      {/* Decorative lines */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
-        <div className="absolute top-3/4 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
-      </div>
+      {/* Subtle background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background to-muted/30" />
 
       <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Section Header */}
         <div
-          className={`text-center mb-20 transition-all duration-1000 ${
+          className={`text-center mb-16 transition-all duration-1000 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
@@ -114,118 +91,69 @@ const Doctors = () => {
           </div>
         </div>
 
-        {/* Doctors Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        {/* Doctors Grid - 3 Cards */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {doctors.map((doctor, index) => (
             <div
               key={doctor.name}
-              className={`group relative transition-all duration-700 ${
+              className={`group transition-all duration-700 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
               }`}
               style={{ transitionDelay: `${index * 150}ms` }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
             >
-              {/* Card */}
-              <div className="relative bg-card rounded-2xl overflow-hidden border border-border hover:border-primary/30 transition-all duration-500 hover:shadow-xl hover:shadow-primary/10">
-                {/* Image container */}
-                <div className="relative h-72 overflow-hidden">
+              {/* Modern Card */}
+              <div className="relative bg-card rounded-3xl overflow-hidden border border-border/50 hover:border-primary/40 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2">
+                {/* Image */}
+                <div className="relative h-80 overflow-hidden">
                   <img
                     src={doctor.image}
                     alt={doctor.name}
-                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                   
                   {/* Specialty badge */}
-                  <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1.5 bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-medium tracking-wide rounded-full">
+                  <div className="absolute top-4 right-4">
+                    <span className="px-3 py-1.5 bg-background/90 backdrop-blur-md text-foreground text-xs font-medium tracking-wide rounded-full border border-border/50">
                       {doctor.specialty}
                     </span>
                   </div>
-
-                  {/* Quote overlay on hover */}
-                  <div
-                    className={`absolute inset-0 bg-primary/95 flex items-center justify-center p-6 transition-all duration-500 ${
-                      hoveredIndex === index ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  >
-                    <p className="text-primary-foreground text-center text-sm italic leading-relaxed">
-                      "{doctor.quote}"
-                    </p>
-                  </div>
-
-                  {/* Name overlay at bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="font-heading text-xl text-background mb-1">
-                      {doctor.name}
-                    </h3>
-                    <p className="text-background/80 text-sm">
-                      {doctor.title}
-                    </p>
-                  </div>
                 </div>
 
-                {/* Info section */}
-                <div className="p-5 bg-card">
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-primary" />
-                      <span>{doctor.experience}</span>
-                    </div>
-                    <div className="w-px h-4 bg-border" />
-                    <div className="flex items-center gap-1.5">
-                      <GraduationCap className="w-4 h-4 text-primary" />
-                      <span className="truncate">{doctor.education}</span>
-                    </div>
+                {/* Content */}
+                <div className="p-6 -mt-12 relative z-10">
+                  {/* Avatar ring effect */}
+                  <div className="w-20 h-20 rounded-full border-4 border-card overflow-hidden mb-4 shadow-lg">
+                    <img
+                      src={doctor.image}
+                      alt={doctor.name}
+                      className="w-full h-full object-cover object-top"
+                    />
                   </div>
 
-                  {/* CTA */}
-                  <Link
-                    to="/reservations"
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-muted text-foreground text-sm font-medium rounded-xl hover:bg-primary hover:text-primary-foreground transition-all duration-300 group/btn"
-                  >
-                    <span>Prendre RDV</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                  </Link>
+                  <h3 className="font-heading text-xl text-foreground mb-1">
+                    {doctor.name}
+                  </h3>
+                  <p className="text-primary text-sm font-medium mb-4">
+                    {doctor.title}
+                  </p>
+
+                  {/* Info pills */}
+                  <div className="flex flex-wrap gap-2">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-muted/50 rounded-full text-xs text-muted-foreground">
+                      <Clock className="w-3.5 h-3.5 text-primary" />
+                      <span>{doctor.experience}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-muted/50 rounded-full text-xs text-muted-foreground">
+                      <GraduationCap className="w-3.5 h-3.5 text-primary" />
+                      <span className="truncate max-w-[120px]">{doctor.education}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Bottom section */}
-        <div
-          className={`mt-20 text-center transition-all duration-1000 delay-700 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="w-12 h-px bg-border" />
-            <div className="w-2 h-2 rotate-45 bg-primary/40" />
-            <div className="w-12 h-px bg-border" />
-          </div>
-          
-          <div className="max-w-3xl mx-auto p-8 bg-card rounded-2xl border border-border">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="text-center md:text-left">
-                <h3 className="font-heading text-2xl text-foreground mb-2">
-                  Rejoignez notre équipe
-                </h3>
-                <p className="text-muted-foreground">
-                  Nous recherchons des praticiens passionnés pour agrandir notre famille.
-                </p>
-              </div>
-              <a
-                href="mailto:careers@centredentaire.fr"
-                className="flex items-center gap-2 px-6 py-3 bg-foreground text-background font-medium rounded-full hover:bg-primary hover:text-primary-foreground transition-all duration-300 whitespace-nowrap"
-              >
-                <span>Postuler</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
         </div>
       </div>
     </section>
