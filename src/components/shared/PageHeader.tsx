@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Menu, X, Phone } from 'lucide-react';
 
 const navLinks = [
   { name: 'À Propos', href: '/#about' },
-  { name: 'Carte', href: '/menu' },
+  { name: 'Services', href: '/#services' },
   { name: 'Galerie', href: '/gallery' },
-  { name: 'Réservations', href: '/reservations' },
+  { name: 'Contact', href: '/#contact' },
 ];
 
 const PageHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,66 +22,73 @@ const PageHeader = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isActive = (href: string) => {
-    if (href === '/#about') return false;
-    return location.pathname.startsWith(href);
-  };
-
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? 'bg-charcoal/95 backdrop-blur-lg py-3 shadow-2xl shadow-black/20'
-          : 'bg-gradient-to-b from-charcoal/80 to-transparent py-5'
+          ? 'bg-background/95 backdrop-blur-md shadow-lg py-4'
+          : 'bg-gradient-to-b from-dental-dark/80 to-transparent py-6'
       }`}
     >
       <div className="container mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="group">
-            <span className="font-luxury text-2xl md:text-3xl tracking-[0.03em] text-offwhite group-hover:text-gold transition-colors duration-300 italic">
-              Maison le Sept
+          <Link
+            to="/"
+            className="group flex items-center gap-2"
+          >
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-primary-foreground font-heading font-bold text-lg">CD</span>
+            </div>
+            <span className={`font-heading text-xl font-semibold tracking-tight transition-colors duration-300 ${
+              isScrolled ? 'text-foreground' : 'text-dental-light'
+            } group-hover:text-primary`}>
+              Centre Dentaire
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-12">
+          <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
-                className={`relative font-sans text-xs tracking-[0.2em] uppercase transition-all duration-300 py-2 ${
-                  isActive(link.href)
-                    ? 'text-gold'
-                    : 'text-offwhite/70 hover:text-offwhite'
+                to={link.href}
+                className={`relative font-sans text-sm font-medium transition-all duration-300 py-2 group ${
+                  isScrolled ? 'text-foreground/70 hover:text-primary' : 'text-dental-light/80 hover:text-dental-light'
                 }`}
               >
                 {link.name}
-                <span
-                  className={`absolute bottom-0 left-0 w-full h-px bg-gold transform origin-left transition-transform duration-300 ${
-                    isActive(link.href) ? 'scale-x-100' : 'scale-x-0'
-                  }`}
-                />
-              </a>
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-full" />
+              </Link>
             ))}
           </div>
 
-          {/* Reservation Button */}
-          <div className="hidden lg:flex items-center">
+          <div className="hidden lg:flex items-center gap-4">
+            <a
+              href="tel:+33142681234"
+              className={`flex items-center gap-2 font-sans text-sm font-medium transition-colors ${
+                isScrolled ? 'text-foreground/70 hover:text-primary' : 'text-dental-light/80 hover:text-dental-light'
+              }`}
+            >
+              <Phone size={16} />
+              <span>01 42 68 12 34</span>
+            </a>
             <Link
               to="/reservations"
               onClick={() => window.scrollTo(0, 0)}
-              className="px-6 py-2.5 bg-transparent text-gold font-sans text-xs tracking-[0.15em] uppercase border border-gold hover:bg-gold hover:text-charcoal transition-all duration-300"
+              className="px-6 py-2.5 font-sans text-sm font-medium transition-all duration-300 bg-primary text-primary-foreground rounded-full hover:bg-secondary hover:shadow-lg hover:shadow-primary/25"
             >
-              Réserver
+              Rendez-vous
             </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden text-offwhite p-2 hover:text-gold transition-colors"
+            className={`lg:hidden p-2 transition-colors duration-300 ${
+              isScrolled ? 'text-foreground hover:text-primary' : 'text-dental-light hover:text-primary'
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Menu"
+            aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -91,31 +97,36 @@ const PageHeader = () => {
         {/* Mobile Menu */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-500 ${
-            isMobileMenuOpen ? 'max-h-[500px] opacity-100 mt-6' : 'max-h-0 opacity-0'
+            isMobileMenuOpen ? 'max-h-96 opacity-100 mt-6' : 'max-h-0 opacity-0'
           }`}
         >
-          <div className="flex flex-col gap-1 py-6 border-t border-offwhite/10">
-            {navLinks.map((link) => (
-              <a
+          <div className={`flex flex-col gap-1 py-6 border-t ${isScrolled ? 'border-border' : 'border-dental-light/10'}`}>
+            {navLinks.map((link, index) => (
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`font-sans text-sm tracking-widest uppercase py-3 px-4 transition-all duration-300 ${
-                  isActive(link.href)
-                    ? 'text-gold bg-offwhite/5'
-                    : 'text-offwhite/70 hover:text-offwhite hover:bg-offwhite/5'
+                className={`font-sans text-sm font-medium py-3 px-4 transition-all duration-300 rounded-lg ${
+                  isScrolled 
+                    ? 'text-foreground/70 hover:text-primary hover:bg-muted' 
+                    : 'text-dental-light/80 hover:text-dental-light hover:bg-dental-light/5'
                 }`}
+                style={{ 
+                  transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : '0ms',
+                }}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
-            
             <Link
               to="/reservations"
               onClick={() => { setIsMobileMenuOpen(false); window.scrollTo(0, 0); }}
-              className="mt-4 mx-4 px-6 py-3 bg-transparent text-gold font-sans text-sm tracking-widest uppercase text-center border border-gold hover:bg-gold hover:text-charcoal transition-all duration-300"
+              className="mt-4 mx-4 px-6 py-3 bg-primary text-primary-foreground font-sans text-sm font-medium text-center rounded-full hover:bg-secondary transition-all duration-300"
+              style={{ 
+                transitionDelay: isMobileMenuOpen ? `${navLinks.length * 50}ms` : '0ms',
+              }}
             >
-              Réserver une Table
+              Prendre Rendez-vous
             </Link>
           </div>
         </div>
